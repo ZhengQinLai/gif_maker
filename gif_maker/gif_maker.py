@@ -1,9 +1,10 @@
 """
 分为两个过程，先从整体视频转变为局部视频，再从局部视频转换为gif（240*240）
 """
+import shutil
+
 from moviepy.editor import VideoFileClip
 import cv2
-import imageio
 from moviepy.video.io.ImageSequenceClip import ImageSequenceClip
 
 FPS = 8
@@ -63,8 +64,9 @@ class Video:
             gif_img.append(file)
         clip = ImageSequenceClip(gif_img,fps=FPS)
         clip.write_gif("expression.gif",fps=FPS)
+        shutil.rmtree('frame')
 
-    def cut(self):
+    def make(self):
         self.cut_time()
         self.cut_space()
         self.reunion()
@@ -73,4 +75,4 @@ if __name__ == "__main__":
     v = Video(r'.\baby.mp4')
     v.begin_end_time((0, 2), (0, 5))
     v.begin_end_space((100, 20), (200, 80))
-    v.cut()
+    v.make()
