@@ -1,6 +1,7 @@
 """
 分为两个过程，先从整体视频转变为局部视频，再从局部视频转换为gif（240*240）
 """
+import os.path
 import shutil
 
 from moviepy.editor import VideoFileClip
@@ -30,8 +31,9 @@ class Video:
         self.s_end = end
 
     def cut_time(self):
-        clip = VideoFileClip(self.filepath, audio=False, target_resolution=(240, None)).subclip(self.t_begin,
-                                                                                                self.t_end)
+        clip = VideoFileClip(self.filepath, audio=False).subclip(self.t_begin, self.t_end)
+        if ~os.path.exists(r"frame"):
+            os.mkdir(r"frame")
         clip.write_images_sequence(
             nameformat=r'frame\frame%03d.png', fps=FPS)
 
@@ -39,19 +41,20 @@ class Video:
         n = -((self.t_begin[0] - self.t_end[0]) * 60 + self.t_begin[1] - self.t_end[1]) * FPS
         for i in range(n):
             if i < 10:
-                file = r'frame\frame00' + str(i)+'.png'
+                file = r'frame\frame00' + str(i) + '.png'
             elif i < 100:
-                file = r'frame\frame0' + str(i)+'.png'
+                file = r'frame\frame0' + str(i) + '.png'
             elif i < 1000:
-                file = r'frame\frame' + str(i)+'.png'
+                file = r'frame\frame' + str(i) + '.png'
             else:
                 file = None
+
             img = cv2.imread(file)
             cv2.imwrite(file, img[self.s_begin[0]:self.s_end[0], self.s_begin[1]:self.s_end[1]])
 
     def reunion(self):
         n = -((self.t_begin[0] - self.t_end[0]) * 60 + self.t_begin[1] - self.t_end[1]) * FPS
-        gif_img=[]
+        gif_img = []
         for i in range(n):
             if i < 10:
                 file = r'frame\frame00' + str(i) + '.png'
@@ -62,14 +65,18 @@ class Video:
             else:
                 file = None
             gif_img.append(file)
-        clip = ImageSequenceClip(gif_img,fps=FPS)
-        clip.write_gif("expression.gif",fps=FPS)
+        clip = ImageSequenceClip(gif_img, fps=FPS)
+        clip.write_videofile("1.mp4")
+        clip = VideoFileClip("1.mp4", target_resolution=(240, None))
+        clip.write_gif("expression.gif", fps=FPS)
         shutil.rmtree('frame')
+        os.remove("1.mp4")
 
     def make(self):
         self.cut_time()
         self.cut_space()
         self.reunion()
+
 
 if __name__ == "__main__":
     v = Video(r'.\baby.mp4')
