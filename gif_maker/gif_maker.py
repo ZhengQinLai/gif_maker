@@ -79,7 +79,7 @@ class Video:
 
 
 if __name__ == "__main__":
-    v = Video(r'.\baby.mp4')
+    v = Video(r'.\gif_maker\baby.mp4')
     v.begin_end_time((0, 2), (0, 5))
     v.begin_end_space((100, 20), (200, 80))
     v.make()
