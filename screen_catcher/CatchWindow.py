@@ -59,10 +59,12 @@ class CatchWindow:
         while True:
             tmp_gray = copy.deepcopy(self.img_gray)
             if self.x1!=None and self.x2 !=None:
+
                 x1 = self.x1 if self.x1 <self.x2 else self.x2
                 x2 = self.x2 if self.x1 <self.x2 else self.x1
                 y1 = self.y1 if self.y1 <self.y2 else self.y2
                 y2 = self.y2 if self.y1 <self.y2 else self.y1
+
                 tmp_gray[y1:y2,x1:x2] = self.img[y1:y2,x1:x2]
                 tmp_gray[y1:y2,x1]=(0, 0, 255)
                 tmp_gray[y1:y2,x2]=(0, 0, 255)
@@ -73,6 +75,11 @@ class CatchWindow:
             if k == 27:
                 break
             if self.stop:
+                self.x1 = x1
+                self.x2 = x2
+                self.y1 = y1
+                self.y2 = y2
+                cv2.destroyAllWindows()
                 break
     '''
     返回截取的四个位置
