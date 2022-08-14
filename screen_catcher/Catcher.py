@@ -3,6 +3,8 @@ from PIL import Image
 import os
 import time
 import keyboard
+import winsound
+
 class Catcher:
 
     x1 = None
@@ -24,11 +26,9 @@ class Catcher:
         
     def catch(self):
         frame=[]
-        #keyboard.wait(57)
-        time.sleep(3)
         t1=time.time()
-        #while(~self.stop):
-        while(time.time()-t1<5):
+        while(~self.stop):
+        #while(time.time()-t1<5):
 
             t_=time.time()
             img = pyautogui.screenshot(region=(self.x1+1, self.y1+1, self.x2-self.x1-1, self.y2-self.y1-1))
@@ -38,6 +38,7 @@ class Catcher:
 
             frame.append(img)
             if(keyboard.is_pressed(57)):
+                winsound.Beep(600,1000)
                 self.stop = True
                 break
 

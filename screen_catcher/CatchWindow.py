@@ -6,6 +6,7 @@ import pyautogui
 import numpy as np
 import tkinter as tk
 import copy
+import keyboard
 
 class CatchWindow:
     #窗口名称
@@ -39,9 +40,7 @@ class CatchWindow:
         self.name = name
         img = pyautogui.screenshot()
         img = np.array(img)
-        cv2.namedWindow(self.name, cv2.WND_PROP_FULLSCREEN)
-        #cv2.moveWindow(self.name, self.width - 1, self.height - 1)
-        cv2.moveWindow(self.name, 2719, 1950)
+        cv2.namedWindow(self.name, cv2.WINDOW_NORMAL,)
         cv2.setWindowProperty(self.name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
         # Convert RGB to BGR,opencv read image as BGR,but Pillow is RGB
         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
@@ -73,7 +72,7 @@ class CatchWindow:
             cv2.imshow(self.name,tmp_gray)
             k = cv2.waitKey(1) & 0xFF
             if k == 27:
-                break
+                exit(0)
             if self.stop:
                 self.x1 = x1
                 self.x2 = x2
@@ -106,5 +105,4 @@ if __name__ == "__main__":
         window = CatchWindow()
         window.create('gif')
         window.catch()
-
         
