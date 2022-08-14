@@ -79,6 +79,7 @@ class CatchWindow:
                 self.y1 = y1
                 self.y2 = y2
                 cv2.destroyAllWindows()
+                self.stop = None
                 break
     '''
     返回截取的四个位置

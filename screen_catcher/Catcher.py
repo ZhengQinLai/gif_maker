@@ -44,7 +44,7 @@ class Catcher:
 
         gif_name=str(str(time.time())+'.gif')
         print(len(frame))
-        frame[0].save(gif_name,save_all=True,append_images=frame[1:],transparency=0,duration=125,loop=0,disposal=2)
+        frame[0].save(gif_name,save_all=True,append_images=frame[1:],transparency=0,duration=125,loop=0,disposal=0)
 
 if __name__ == "__main__":
     c = Catcher(0, 100, 0, 100)

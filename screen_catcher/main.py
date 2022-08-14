@@ -15,7 +15,7 @@ window = CatchWindow.CatchWindow()
 
 while(1):
     if(keyboard.is_pressed('ctrl+space')):
-        
+
         window.create('gif')  
 
         hwnd_map = {}
@@ -35,3 +35,4 @@ while(1):
         winsound.Beep(600,1000)
         c = Catcher.Catcher(x1, x2, y1, y2)
         c.catch()
+        
