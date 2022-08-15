@@ -1,19 +1,15 @@
-'''
-捕获窗口类
-'''
 import cv2
 import pyautogui
 import numpy as np
-import tkinter as tk
 import copy
-import keyboard
+import win32gui
+import win32com.client
+
+hwnd_map = {}
 
 class CatchWindow:
     #窗口名称
     name = None
-    #当前分辨率
-    height = None
-    width = None
     #截屏
     img = None
     img_gray = None
@@ -26,10 +22,6 @@ class CatchWindow:
     stop = None
 
     def __init__(self) -> None:
-        root = tk.Tk()
-        self.height=root.winfo_screenheight()
-        self.width=root.winfo_screenwidth()
-        root.destroy()
         pass
     '''
     创建一个窗口，其内容为当前屏幕，全屏，并且将屏幕以及其灰度图像存储
@@ -39,6 +31,7 @@ class CatchWindow:
     def create(self, name = 'window'):
         self.name = name
         img = pyautogui.screenshot()
+
         img = np.array(img)
         cv2.namedWindow(self.name, cv2.WINDOW_NORMAL,)
         cv2.setWindowProperty(self.name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
@@ -48,6 +41,17 @@ class CatchWindow:
         img_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
         img_gray = cv2.cvtColor(img_gray, cv2.COLOR_RGB2BGR)
         self.img_gray = img_gray
+
+    def top(self):
+        win32gui.EnumWindows(get_all_hwnd, 0) 
+        for h, t in hwnd_map.items():
+            if t == self.name:
+                # h 为想要放到最前面的窗口句柄
+                win32gui.BringWindowToTop(h)
+                shell = win32com.client.Dispatch("WScript.Shell")
+                shell.SendKeys('%')	
+                # 被其他窗口遮挡，调用后放到最前面
+                win32gui.SetForegroundWindow(h)
     '''
     渲染灰度图像，捕捉鼠标起始位置，在起始位置围框中渲染彩色图像
     @param 无
@@ -102,6 +106,12 @@ def click_record(event,x,y,flags,self):
             self.x2, self.y2 = x, y
 
         
+def get_all_hwnd(hwnd, mouse):
+    if (win32gui.IsWindow(hwnd) and
+        win32gui.IsWindowEnabled(hwnd) and
+        win32gui.IsWindowVisible(hwnd)):
+        hwnd_map.update({hwnd: win32gui.GetWindowText(hwnd)})
+ 
 if __name__ == "__main__":
         window = CatchWindow()
         window.create('gif')

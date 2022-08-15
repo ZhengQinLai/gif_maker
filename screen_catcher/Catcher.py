@@ -1,6 +1,5 @@
 import pyautogui
 from PIL import Image
-import os
 import time
 import keyboard
 import winsound
@@ -38,13 +37,13 @@ class Catcher:
 
             frame.append(img)
             if(keyboard.is_pressed(57)):
-                winsound.Beep(600,1000)
+                winsound.Beep(600,500)
                 self.stop = True
                 break
 
         gif_name=str(str(time.time())+'.gif')
         print(len(frame))
-        frame[0].save(gif_name,save_all=True,append_images=frame[1:],transparency=0,duration=125,loop=0,disposal=0)
+        frame[0].save(gif_name,save_all=True,append_images=frame[1:],transparency=255,duration=125,loop=0,disposal=0)
 
 if __name__ == "__main__":
     c = Catcher(0, 100, 0, 100)
